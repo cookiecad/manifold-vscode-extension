@@ -11,14 +11,14 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onCommand:manifold.openEditor"
+    "onCommand:manifold.openViewer"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "manifold.openEditor",
-        "title": "Open Manifold 3D Editor"
+        "command": "manifold.openViewer",
+        "title": "Manifold: Open 3D Viewer"
       }
     ]
   },

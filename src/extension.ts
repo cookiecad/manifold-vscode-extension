@@ -8,7 +8,7 @@ export function activate(context: vscode.ExtensionContext) {
   registerManifoldTypes(context);
   let panel: vscode.WebviewPanel | undefined;
 
-  const openEditor = vscode.commands.registerCommand('manifold.openEditor', () => {
+  const openViewer = vscode.commands.registerCommand('manifold.openViewer', () => {
     if (panel) {
       panel.reveal();
       return;
@@ -108,7 +108,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
   });
 
-  context.subscriptions.push(openEditor);
+  context.subscriptions.push(openViewer);
 
   // Listen for file saves and send code to the webview
   vscode.workspace.onDidSaveTextDocument((doc) => {

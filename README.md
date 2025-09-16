@@ -36,7 +36,7 @@ A new VS Code window will open with the extension loaded.
 ## Usage
 
 1. Open or create a `.mfc` file in VS Code.
-2. The custom editor will automatically launch, displaying the 3D model and animation controls.
+2. Run the `Manifold: Open 3D Viewer` command from the Command Palette (Ctrl+Shift+P).
 3. Edit your code and see the results update live in the viewer.
 
 ## Learn More
