@@ -23,4 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-src/wasm
+src/wasm/manifold.js
+src/wasm/manifold.wasm
