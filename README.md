@@ -19,7 +19,7 @@ The extension provides a custom viewer for `.mfc` and `.manifoldcad` files, open
 ## Development
 
 1. Clone this repository and run `pnpm install` in the root directory.
-2. Now build the manifold library and copy the `manifold.js` and `manifold.wasm` files into the `src/webview/wasm/` directory.
+2. Now build the manifold library and copy the `manifold.js` and `manifold.wasm` files into the `src/webview/src/wasm/` directory.
 3. Build the webview by navigating to `src/webview/` and running:
   ```sh
   pnpm install
