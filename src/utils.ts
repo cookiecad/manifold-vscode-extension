@@ -39,24 +39,6 @@ export const addManifoldTypesComment = async (doc: vscode.TextDocument) => {
   }
 }
 
-// Ensure files.associations includes .mfc/.manifoldcad -> typescript
-export async function ensureFileAssociations() {
-  const config = vscode.workspace.getConfiguration();
-  const associations = config.get<{ [key: string]: string }>('files.associations') || {};
-  let changed = false;
-  if (associations['*.mfc'] !== 'typescript') {
-    associations['*.mfc'] = 'typescript';
-    changed = true;
-  }
-  if (associations['*.manifoldcad'] !== 'typescript') {
-    associations['*.manifoldcad'] = 'typescript';
-    changed = true;
-  }
-  if (changed) {
-    await config.update('files.associations', associations, vscode.ConfigurationTarget.Workspace);
-  }
-}
-
 export function transpileTypeScript(code: string): string {
   return ts.transpileModule(code, {
     compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext }

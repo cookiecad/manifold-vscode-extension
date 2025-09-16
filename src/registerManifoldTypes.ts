@@ -1,13 +1,10 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import { addManifoldTypesComment, ensureFileAssociations } from './utils';
+import { addManifoldTypesComment } from './utils';
 
 
 export function registerManifoldTypes(context: vscode.ExtensionContext) {
-  // Ensure .mfc/.manifoldcad are associated with TypeScript
-  ensureFileAssociations();
-
   // Only generate .vscode/manifold-types.d.ts when a .mfc or .manifoldcad file is opened
   async function ensureManifoldTypesFile() {
     const wsFolders = vscode.workspace.workspaceFolders;

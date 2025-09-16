@@ -20,6 +20,13 @@
         "command": "manifold.openViewer",
         "title": "Manifold: Open 3D Viewer"
       }
+    ],
+    "languages": [
+      {
+        "id": "typescript",
+        "aliases": ["TypeScript", "ts"],
+        "extensions": [".mfc", ".manifoldcad"]
+      }
     ]
   },
   "scripts": {
