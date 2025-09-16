@@ -3,3 +3,5 @@ manifold.wasm
 lib/*.js
 lib/*.js.map
 lib/*.d.ts
+
+!lib/3mf-export.d.ts
