@@ -33,6 +33,11 @@ The extension provides a custom viewer for `.mfc` and `.manifoldcad` files, open
 A `launch.json` configuration is provided, so inside VS Code, open the Debug panel, select "Launch Extension", and hit the green play button.
 A new VS Code window will open with the extension loaded.
 
+6. Or: build the .vsix package for distribution:
+  ```sh
+  npx vsce package
+  ```
+
 ## Usage
 
 1. Open or create a `.mfc` file in VS Code.
