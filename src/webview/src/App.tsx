@@ -6,6 +6,7 @@ import ManifoldWorker from './wasm/examples/worker-wrapper.ts?worker';
 import { Viewer } from './components/Viewer';
 import { Console } from './components/Console';
 import { signalAppIsReady } from './signalAppIsReady';
+import { ModuleKind, ScriptTarget, transpile } from 'typescript';
 
 export default function App() {
   const workerRef = useRef<Worker>(null);
@@ -40,7 +41,9 @@ export default function App() {
           setLogs([]);
           setGlbUrl(null);
           console.log('[App] posting code to worker', event.data.fileName, event.data.code);
-          workerRef.current?.postMessage({ code: event.data.code, fileName: event.data.fileName });
+          // Transpile TypeScript to JavaScript before sending to worker
+          const javascript = transpile(event.data.code, { module: ModuleKind.ESNext, target: ScriptTarget.ESNext });
+          workerRef.current?.postMessage({ code: javascript, fileName: event.data.fileName });
         }
       });
       // Signal to vscode that app is ready

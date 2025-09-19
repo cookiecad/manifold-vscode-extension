@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import ts from 'typescript';
 
 const manifoldTypeFile = 'manifold-types.d.ts';
 
@@ -39,19 +38,13 @@ export const addManifoldTypesComment = async (doc: vscode.TextDocument) => {
   }
 }
 
-export function transpileTypeScript(code: string): string {
-  return ts.transpileModule(code, {
-    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext }
-  }).outputText;
-}
-
 /**
  * Send the contents of a text document to the webview panel to generate a new Manifold model
  */
 export function sendScriptToGenerate(panel: vscode.WebviewPanel, doc: vscode.TextDocument) {
   panel.webview.postMessage({
     type: 'updateScript',
-    code: transpileTypeScript(doc.getText()),
+    code: doc.getText(),
     fileName: doc.fileName
   });
 }

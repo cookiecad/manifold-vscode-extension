@@ -1,0 +1,11 @@
+**/src/**
+**/node_modules/**
+**/pnpm-lock.yaml
+**/tsconfig*.json
+**/README.md
+**/webview/**
+**/.gitignore
+**/.vscode/**
+!src/webview/src/wasm/manifold-global-types.d.ts
+!src/webview/src/wasm/manifold-encapsulated-types.d.ts
+!src/webview/src/wasm/examples/public/editor.d.ts

@@ -1,3 +1,4 @@
 out
 media
 node_modules
+*.vsix

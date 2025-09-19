@@ -38,6 +38,9 @@ importers:
       three:
         specifier: ^0.172.0
         version: 0.172.0
+      typescript:
+        specifier: ~5.8.3
+        version: 5.8.3
     devDependencies:
       '@eslint/js':
         specifier: ^9.33.0
@@ -66,9 +69,6 @@ importers:
       globals:
         specifier: ^16.3.0
         version: 16.4.0
-      typescript:
-        specifier: ~5.8.3
-        version: 5.8.3
       typescript-eslint:
         specifier: ^8.39.1
         version: 8.43.0(eslint@9.35.0)(typescript@5.8.3)

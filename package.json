@@ -2,16 +2,20 @@
   "name": "manifold-vscode-extension",
   "displayName": "Manifold 3D Editor",
   "description": "Run and visualize Manifold 3D scripts inside VS Code.",
+  "publisher": "Loosetooth",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Loosetooth/manifold-vscode-extension"
+  },
   "version": "0.0.1",
   "engines": {
-    "vscode": ">=1.70.0"
+    "vscode": "^1.70.0"
   },
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "onStartupFinished",
-    "onCommand:manifold.openViewer"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -24,8 +28,14 @@
     "languages": [
       {
         "id": "typescript",
-        "aliases": ["TypeScript", "ts"],
-        "extensions": [".mfc", ".manifoldcad"]
+        "aliases": [
+          "TypeScript",
+          "ts"
+        ],
+        "extensions": [
+          ".mfc",
+          ".manifoldcad"
+        ]
       }
     ]
   },
@@ -36,13 +46,13 @@
   },
   "devDependencies": {
     "@types/node": "^24.4.0",
-    "@types/vscode": "^1.104.0",
+    "@types/vscode": "^1.70.0",
     "@vscode/vsce": "^3.6.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.5"
   },
   "dependencies": {
-    "gl-matrix": "^3.4.4",
-    "manifold-3d": "^3.2.1"
+    "esbuild-wasm": "^0.25.9",
+    "gl-matrix": "^3.4.4"
   }
 }
