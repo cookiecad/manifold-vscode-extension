@@ -10,7 +10,7 @@
   "icon": "mengerSponge192.png",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.70.0"
+    "vscode": "^1.75.0"
   },
   "categories": [
     "Other"
@@ -46,8 +46,7 @@
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
-    "@types/node": "^24.4.0",
-    "@types/vscode": "^1.70.0",
+    "@types/vscode": "^1.75.0",
     "@vscode/vsce": "^3.6.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.5"
