@@ -1,6 +1,4 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
-import * as fs from 'fs';
 import { addManifoldTypesComment } from './utils';
 
 
@@ -9,28 +7,39 @@ export function registerManifoldTypes(context: vscode.ExtensionContext) {
   async function ensureManifoldTypesFile() {
     const wsFolders = vscode.workspace.workspaceFolders;
     if (wsFolders && wsFolders.length > 0) {
-      const wsRoot = wsFolders[0].uri.fsPath;
-      const vscodeDir = path.join(wsRoot, '.vscode');
-      const topLevelTypeFile = path.join(vscodeDir, 'manifold-types.d.ts');
-      const globalTypes = path.join(context.extensionPath, 'src', 'webview', 'src', 'wasm', 'manifold-global-types.d.ts');
-      const encapsulatedTypes = path.join(context.extensionPath, 'src', 'webview', 'src', 'wasm', 'manifold-encapsulated-types.d.ts');
-      const editorTypes = path.join(context.extensionPath, 'src', 'webview', 'src', 'wasm', 'examples', 'public', 'editor.d.ts');
+      const wsRoot = wsFolders[0].uri;
+      const vscodeDir = vscode.Uri.joinPath(wsRoot, '.vscode');
+      const topLevelTypeFile = vscode.Uri.joinPath(vscodeDir, 'manifold-types.d.ts');
+      const globalTypes = vscode.Uri.joinPath(context.extensionUri, 'src', 'webview', 'src', 'wasm', 'manifold-global-types.d.ts');
+      const encapsulatedTypes = vscode.Uri.joinPath(context.extensionUri, 'src', 'webview', 'src', 'wasm', 'manifold-encapsulated-types.d.ts');
+      const editorTypes = vscode.Uri.joinPath(context.extensionUri, 'src', 'webview', 'src', 'wasm', 'examples', 'public', 'editor.d.ts');
       try {
-        if (!fs.existsSync(vscodeDir)) {
-          fs.mkdirSync(vscodeDir);
+        // Create .vscode dir if it doesn't exist
+        try {
+          await vscode.workspace.fs.stat(vscodeDir);
+        } catch {
+          await vscode.workspace.fs.createDirectory(vscodeDir);
         }
-        if (!fs.existsSync(topLevelTypeFile)) {
+        // Only write if file doesn't exist
+        let fileExists = false;
+        try {
+          await vscode.workspace.fs.stat(topLevelTypeFile);
+          fileExists = true;
+        } catch { }
+        if (!fileExists) {
           // Generate types file
-          const global = fs.existsSync(globalTypes) ? fs.readFileSync(globalTypes, 'utf8') : '';
-          const encapsulated = fs.existsSync(encapsulatedTypes) ? fs.readFileSync(encapsulatedTypes, 'utf8') : '';
-          const editor = fs.existsSync(editorTypes) ? fs.readFileSync(editorTypes, 'utf8') : '';
+          let global = '', encapsulated = '', editor = '';
+          const decoder = new TextDecoder('utf-8');
+          try { global = decoder.decode(await vscode.workspace.fs.readFile(globalTypes)); } catch { }
+          try { encapsulated = decoder.decode(await vscode.workspace.fs.readFile(encapsulatedTypes)); } catch { }
+          try { editor = decoder.decode(await vscode.workspace.fs.readFile(editorTypes)); } catch { }
 
           // Apply the same transformations as editor.js
           const importableEditorTypes = editor.replace(/^import.*$/gm, '');
 
           const manifoldToplevel = `
-${global.replaceAll('export', '')}
-${encapsulated.replace(/^import.*$/gm, '').replaceAll('export', 'declare')}
+${global.replace(/export/g, '')}
+${encapsulated.replace(/^import.*$/gm, '').replace(/export/g, 'declare')}
 declare interface ManifoldToplevel {
   CrossSection: typeof CrossSection;
   Manifold: typeof Manifold;
@@ -46,7 +55,7 @@ declare interface ManifoldToplevel {
 declare const module: ManifoldToplevel;
 `;
 
-          fs.writeFileSync(topLevelTypeFile, `${manifoldToplevel}\n\n${importableEditorTypes}`);
+          await vscode.workspace.fs.writeFile(topLevelTypeFile, new TextEncoder().encode(`${manifoldToplevel}\n\n${importableEditorTypes}`));
         }
       } catch (err) {
         vscode.window.showErrorMessage('Failed to set up Manifold types: ' + err);

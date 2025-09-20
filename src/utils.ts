@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
 
 const manifoldTypeFile = 'manifold-types.d.ts';
 
@@ -9,13 +8,25 @@ const manifoldTypeFile = 'manifold-types.d.ts';
 export function generateManifoldTypesComment(doc: vscode.TextDocument): string {
   const wsFolder = vscode.workspace.getWorkspaceFolder(doc.uri);
   if (!wsFolder) return '';
-  const wsRoot = wsFolder.uri.fsPath;
-  const typesFile = path.join(wsRoot, '.vscode', manifoldTypeFile);
-  const docDir = path.dirname(doc.uri.fsPath);
-  let relPath = path.relative(docDir, typesFile);
-  // Always use forward slashes for triple-slash reference
-  relPath = relPath.split(path.sep).join('/');
+  // Use Uri manipulation for web compatibility
+  const wsRoot = wsFolder.uri;
+  const typesFile = vscode.Uri.joinPath(wsRoot, '.vscode', manifoldTypeFile);
+  const docDir = vscode.Uri.joinPath(doc.uri, '..');
+  // Compute relative path manually (since path.relative is not available)
+  let relPath = relativeUriPath(docDir, typesFile);
   return `/// <reference path="${relPath}" />`;
+}
+
+// Helper to compute relative path between two vscode.Uri (using only forward slashes)
+function relativeUriPath(from: vscode.Uri, to: vscode.Uri): string {
+  const fromParts = from.path.split('/').filter(Boolean);
+  const toParts = to.path.split('/').filter(Boolean);
+  // Find common prefix
+  let i = 0;
+  while (i < fromParts.length && i < toParts.length && fromParts[i] === toParts[i]) i++;
+  const up = fromParts.length - i;
+  const down = toParts.slice(i);
+  return `${'../'.repeat(up)}${down.join('/')}`;
 }
 
 export const addManifoldTypesComment = async (doc: vscode.TextDocument) => {

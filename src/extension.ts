@@ -1,6 +1,5 @@
 import { registerManifoldTypes } from './registerManifoldTypes';
 import * as vscode from 'vscode';
-import * as path from 'path';
 import { sendScriptToGenerate } from './utils';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -8,7 +7,7 @@ export function activate(context: vscode.ExtensionContext) {
   registerManifoldTypes(context);
   let panel: vscode.WebviewPanel | undefined;
 
-  const openViewer = vscode.commands.registerCommand('manifold.openViewer', () => {
+  const openViewer = vscode.commands.registerCommand('manifold.openViewer', async () => {
     if (panel) {
       panel.reveal();
       return;
@@ -20,45 +19,51 @@ export function activate(context: vscode.ExtensionContext) {
       {
         enableScripts: true,
         localResourceRoots: [
-          vscode.Uri.file(path.join(context.extensionPath, 'media')),
-          vscode.Uri.file(path.join(context.extensionPath, 'media', 'assets'))
+          vscode.Uri.joinPath(context.extensionUri, 'media'),
+          vscode.Uri.joinPath(context.extensionUri, 'media', 'assets')
         ],
         retainContextWhenHidden: true
       }
     );
 
-    // Find hashed worker, wasm, and icon files in media/assets and media
-    const fs = require('fs');
-    const assetsDir = path.join(context.extensionPath, 'media', 'assets');
-    const mediaDir = path.join(context.extensionPath, 'media');
-    const assetFiles = fs.readdirSync(assetsDir);
-    const mediaFiles = fs.readdirSync(mediaDir);
-    const workerFile = assetFiles.find((f: string) => f.startsWith('worker-wrapper') && f.endsWith('.js'));
-    const wasmFile = assetFiles.find((f: string) => f.startsWith('manifold') && f.endsWith('.wasm'));
-    // Find play/pause icons in media (built by Vite)
-    const playIconFile = mediaFiles.find((f: string) => f.startsWith('play') && f.endsWith('.png'));
-    const pauseIconFile = mediaFiles.find((f: string) => f.startsWith('pause') && f.endsWith('.png'));
-    if (!workerFile || !wasmFile || !playIconFile || !pauseIconFile) {
-      vscode.window.showErrorMessage('Could not find worker, wasm, or icon files in media/assets.');
+    // Read asset manifest
+    const manifestUri = vscode.Uri.joinPath(context.extensionUri, 'media', 'assets', 'assets-manifest.json');
+    let manifest: any;
+    try {
+      const manifestBytes = await vscode.workspace.fs.readFile(manifestUri);
+      const manifestText = new TextDecoder('utf-8').decode(manifestBytes);
+      manifest = JSON.parse(manifestText);
+    } catch (e) {
+      vscode.window.showErrorMessage('Could not read assets-manifest.json.');
       return;
     }
+
+    // Get asset filenames from manifest
+    const workerFile = manifest.worker;
+    const wasmFile = manifest.wasm;
+    const mainJsFile = manifest.mainJs;
+    const mainCssFile = manifest.mainCss;
+    const playIconFile = manifest.playIcon;
+    const pauseIconFile = manifest.pauseIcon;
+
+    // Build URIs
     const mainJsUri = panel.webview.asWebviewUri(
-      vscode.Uri.file(path.join(context.extensionPath, 'media', 'main.js'))
+      vscode.Uri.joinPath(context.extensionUri, 'media', mainJsFile)
     );
     const mainCssUri = panel.webview.asWebviewUri(
-      vscode.Uri.file(path.join(assetsDir, 'index.css'))
+      vscode.Uri.joinPath(context.extensionUri, 'media', 'assets', mainCssFile)
     );
     const workerUri = panel.webview.asWebviewUri(
-      vscode.Uri.file(path.join(assetsDir, workerFile))
+      vscode.Uri.joinPath(context.extensionUri, 'media', 'assets', workerFile)
     );
     const wasmUri = panel.webview.asWebviewUri(
-      vscode.Uri.file(path.join(assetsDir, wasmFile))
+      vscode.Uri.joinPath(context.extensionUri, 'media', 'assets', wasmFile)
     );
     const playIconUri = panel.webview.asWebviewUri(
-      vscode.Uri.file(path.join(mediaDir, playIconFile))
+      vscode.Uri.joinPath(context.extensionUri, 'media', playIconFile)
     );
     const pauseIconUri = panel.webview.asWebviewUri(
-      vscode.Uri.file(path.join(mediaDir, pauseIconFile))
+      vscode.Uri.joinPath(context.extensionUri, 'media', pauseIconFile)
     );
 
     // Inject the URIs as global JS variables
@@ -81,8 +86,6 @@ export function activate(context: vscode.ExtensionContext) {
     <script type="module" src="${mainJsUri}"></script>
   </body>
 </html>`;
-
-    console.log(`Generated HTML:\n${html}\n    `);
 
     panel.webview.html = html;
 
