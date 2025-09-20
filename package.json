@@ -7,6 +7,7 @@
     "type": "git",
     "url": "https://github.com/Loosetooth/manifold-vscode-extension"
   },
+  "icon": "mengerSponge192.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.70.0"
