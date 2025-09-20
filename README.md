@@ -16,6 +16,13 @@ This extension brings the [Manifold](https://github.com/elalish/manifold) geomet
 
 The extension provides a custom viewer for `.mfc` and `.manifoldcad` files, opening a webview panel that renders your 3D models and animations. The webview is built with React and Vite, and leverages the Manifold WASM bindings for mesh generation.
 
+## Usage
+
+1. Open or create a `.mfc` or `.manifoldcad` file in VS Code.
+2. A triple slash typescript import should automatically be added to the top of the file. This is what provides the TypeScript definitions for the Manifold API.
+3. Run the `Manifold: Open 3D Viewer` command from the Command Palette (Ctrl+Shift+P).
+4. Edit your code and save the file. See the results update live in the viewer.
+
 ## Development
 
 1. Clone this repository and run `pnpm install` in the root directory.
@@ -38,13 +45,14 @@ A new VS Code window will open with the extension loaded.
   npx vsce package
   ```
 
-## Usage
-
-1. Open or create a `.mfc` file in VS Code.
-2. Run the `Manifold: Open 3D Viewer` command from the Command Palette (Ctrl+Shift+P).
-3. Edit your code and see the results update live in the viewer.
-
 ## Learn More
 
 - [Manifold Library Documentation](https://github.com/elalish/manifold)
 - [VS Code Extension API](https://code.visualstudio.com/api)
+
+## Known Issues
+
+Opening multiple .mfc files causes type errors to appear in the opened file due to the triple slash type import.
+This is because the same context is shared between the opened files, and the typescript compiler sees multiple variables with the same name.
+
+The solution is to only open one .mfc file at a time.
