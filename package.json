@@ -1,11 +1,11 @@
 {
   "name": "manifold-vscode-extension",
-  "displayName": "Manifold 3D Editor",
-  "description": "Run and visualize Manifold 3D scripts inside VS Code.",
-  "publisher": "Loosetooth",
+  "displayName": "ManifoldCAD Viewer",
+  "description": "Run and visualize ManifoldCAD scripts inside VS Code.",
+  "publisher": "Cookiecad",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Loosetooth/manifold-vscode-extension"
+    "url": "https://github.com/cookiecad/manifold-vscode-extension"
   },
   "type": "commonjs",
   "icon": "mengerSponge192.png",
@@ -61,13 +61,14 @@
     "bundle:extension": "esbuild src/extension.ts --bundle --platform=node --format=cjs --outfile=out/extension.js --external:vscode",
     "compile": "pnpm run bundle:extension",
     "watch": "tsc -watch -p ./",
-    "package": "pnpm install && pnpm run compile && pnpm run build:webview && npx vsce package",
+    "build": "pnpm install && pnpm run build:webview && pnpm run compile",
+    "package": "pnpm run build && npx vsce package",
     "build:webview": "cd src/webview && pnpm install && pnpm run build && node ../../scripts/generate-assets-manifest.js",
     "clean": "rm -rf out/* && rm -rf media/*"
   },
   "devDependencies": {
     "@types/vscode": "^1.75.0",
-    "@vscode/vsce": "^3.6.0",
+    "@vscode/vsce": "^3.6.2",
     "esbuild": "^0.25.10",
     "typescript": "^5.9.2",
     "vite": "^7.1.5"

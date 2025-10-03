@@ -1,6 +1,21 @@
-# Manifold VS Code Extension
+# ManifoldCAD VS Code Extension
 
-This extension brings the [Manifold](https://github.com/elalish/manifold) geometry library to Visual Studio Code, allowing you to generate, visualize, and animate manifold 3D meshes programmatically. Right from your editor.
+A VS Code extension bringing [ManifoldCAD](https://manifoldcad.org) functionality to VS Code. It allows creation of .mfc and .manifoldcad files, containing scripts compatible with manifoldcad.org. It also adds a 3D preview panel for previewing the resulting mesh inside VS Code. The preview panel should support all features of manifoldcad.org, such as coloring and animations.
+
+Both desktop VS Code and [vscode.dev](https://vscode.dev) (any web version) are supported.
+
+This extension has been developed with support from [Cookiecad](https://cookiecad.com).
+
+## Preview
+
+![ManifoldCAD Preview](https://github.com/cookiecad/manifold-vscode-extension/blob/master/demo.gif?raw=true)
+
+## Usage
+
+1. Open or create a `.mfc` or `.manifoldcad` file in VS Code.
+2. A triple slash typescript import should automatically be added to the top of the file. This is what provides the TypeScript definitions for the Manifold API.
+3. Run the `Manifold: Open 3D Viewer` command from the Command Palette (Ctrl+Shift+P).
+4. Edit your code and save the file. See the results update live in the viewer.
 
 ## What is Manifold?
 
@@ -15,13 +30,6 @@ This extension brings the [Manifold](https://github.com/elalish/manifold) geomet
 ## How It Works
 
 The extension provides a custom viewer for `.mfc` and `.manifoldcad` files, opening a webview panel that renders your 3D models and animations. The webview is built with React and Vite, and leverages the Manifold WASM bindings for mesh generation.
-
-## Usage
-
-1. Open or create a `.mfc` or `.manifoldcad` file in VS Code.
-2. A triple slash typescript import should automatically be added to the top of the file. This is what provides the TypeScript definitions for the Manifold API.
-3. Run the `Manifold: Open 3D Viewer` command from the Command Palette (Ctrl+Shift+P).
-4. Edit your code and save the file. See the results update live in the viewer.
 
 ## Development
 
@@ -44,6 +52,8 @@ A new VS Code window will open with the extension loaded.
   ```sh
   npx vsce package
   ```
+
+See the `package.json` scripts for more commands.
 
 ## Learn More
 
