@@ -40,7 +40,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Get asset filenames from manifest
     const workerFile = manifest.worker;
-    const wasmFile = manifest.wasm;
+    const manifoldWasmFile = manifest.manifoldWasm;
+    const esbuildWasmFile = manifest.esbuildWasm;
     const mainJsFile = manifest.mainJs;
     const mainCssFile = manifest.mainCss;
     const playIconFile = manifest.playIcon;
@@ -56,8 +57,11 @@ export function activate(context: vscode.ExtensionContext) {
     const workerUri = panel.webview.asWebviewUri(
       vscode.Uri.joinPath(context.extensionUri, 'media', 'assets', workerFile)
     );
-    const wasmUri = panel.webview.asWebviewUri(
-      vscode.Uri.joinPath(context.extensionUri, 'media', 'assets', wasmFile)
+    const manifoldWasmUri = panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(context.extensionUri, 'media', 'assets', manifoldWasmFile)
+    );
+    const esbuildWasmUri = panel.webview.asWebviewUri(
+      vscode.Uri.joinPath(context.extensionUri, 'media', 'assets', esbuildWasmFile)
     );
     const playIconUri = panel.webview.asWebviewUri(
       vscode.Uri.joinPath(context.extensionUri, 'media', playIconFile)
@@ -76,7 +80,8 @@ export function activate(context: vscode.ExtensionContext) {
     <link rel="stylesheet" href="${mainCssUri}">
     <script>
       window.MANIFOLD_WORKER_URL = "${workerUri}";
-      window.MANIFOLD_WASM_URL = "${wasmUri}";
+      window.MANIFOLD_WASM_URL = "${manifoldWasmUri}";
+      window.ESBUILD_WASM_URL = "${esbuildWasmUri}";
       window.MANIFOLD_PLAY_ICON_URL = "${playIconUri}";
       window.MANIFOLD_PAUSE_ICON_URL = "${pauseIconUri}";
     </script>

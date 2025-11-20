@@ -11,18 +11,20 @@ function findFile(dir, prefix, ext) {
 }
 
 function main() {
-  const worker = findFile(assetsDir, 'worker-wrapper', '.js');
-  const wasm = findFile(assetsDir, 'manifold', '.wasm');
+  const worker = findFile(assetsDir, 'worker', '.js');
+  const manifoldWasm = findFile(assetsDir, 'manifold', '.wasm');
+  const esbuildWasm = findFile(assetsDir, 'esbuild', '.wasm');
   const mainJs = findFile(mediaDir, 'main', '.js');
   const mainCss = findFile(assetsDir, 'index', '.css');
   const playIcon = findFile(mediaDir, 'play', '.png');
   const pauseIcon = findFile(mediaDir, 'pause', '.png');
-  if (!worker || !wasm || !mainJs || !mainCss || !playIcon || !pauseIcon) {
+  if (!worker || !manifoldWasm || !esbuildWasm || !mainJs || !mainCss || !playIcon || !pauseIcon) {
     throw new Error('Missing one or more required asset files.');
   }
   const manifest = {
     worker,
-    wasm,
+    manifoldWasm,
+    esbuildWasm,
     mainJs,
     mainCss,
     playIcon,

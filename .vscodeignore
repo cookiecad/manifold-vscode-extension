@@ -7,6 +7,4 @@ demo.gif
 **/webview/**
 **/.gitignore
 **/.vscode/**
-!src/webview/src/wasm/manifold-global-types.d.ts
-!src/webview/src/wasm/manifold-encapsulated-types.d.ts
-!src/webview/src/wasm/examples/public/editor.d.ts
+!src/webview/types/gl-matrix.d.tss
